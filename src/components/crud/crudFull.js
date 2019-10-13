@@ -121,6 +121,7 @@ export class CrudFull extends Component {
 			renderField,
 			CustomButtons,
 			rowSelection,
+			bordered
 		} = this.props;
 
 		const { title, titleEdit, fields } = createFormOptions || {};
@@ -189,6 +190,7 @@ export class CrudFull extends Component {
 					tdClass={tdClass}
 					scrollX={scrollX}
 					rowSelection={rowSelection}
+					bordered={bordered}
 				/>
 				{isModalOpen === modelName && !createDisabled
 					? (
@@ -246,7 +248,8 @@ CrudFull.propTypes = {
 		PropTypes.func,
 		PropTypes.object
 	]),
-	uploadFilesSettings: PropTypes.string
+	uploadFilesSettings: PropTypes.string,
+	bordered: PropTypes.bool,
 };
 
 CrudFull.defaultProps = {

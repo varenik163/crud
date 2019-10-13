@@ -130,6 +130,8 @@ var storeShape = propTypes.shape({
  * @returns {void}
  */
 
+var prefixUnsafeLifecycleMethods = typeof React__default.forwardRef !== "undefined";
+
 function createProvider(storeKey) {
   var _Provider$childContex;
 
@@ -456,6 +458,7 @@ function () {
   return Subscription;
 }();
 
+var prefixUnsafeLifecycleMethods$1 = typeof React__default.forwardRef !== "undefined";
 var hotReloadingVersion = 0;
 var dummyState = {};
 
@@ -594,7 +597,8 @@ _ref) {
         this.subscription.trySubscribe();
         this.selector.run(this.props);
         if (this.selector.shouldComponentUpdate) this.forceUpdate();
-      };
+      }; // Note: this is renamed below to the UNSAFE_ version in React >=16.3.0
+
 
       _proto.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
         this.selector.run(nextProps);
@@ -695,6 +699,12 @@ _ref) {
 
       return Connect;
     }(React.Component);
+
+    if (prefixUnsafeLifecycleMethods$1) {
+      // Use UNSAFE_ event name where supported
+      Connect.prototype.UNSAFE_componentWillReceiveProps = Connect.prototype.componentWillReceiveProps;
+      delete Connect.prototype.componentWillReceiveProps;
+    }
     /* eslint-enable react/no-deprecated */
 
 
@@ -10914,7 +10924,12 @@ var filterDropdown = (function (name, type, options) {
       style: {
         width: '130px',
         marginRight: '8px'
-      }
+      },
+      showSearch: true,
+      filterOption: function filterOption(search, option) {
+        return option.props.children.toLowerCase().indexOf(search.toLowerCase()) >= 0;
+      },
+      onSearch: function onSearch() {}
     }, options.map(function (opt) {
       return React__default.createElement(Option, {
         value: opt.value,
@@ -16604,9 +16619,9 @@ function (_Component) {
       }
     });
 
-    _defineProperty$1(_assertThisInitialized$2(_this), "getFiterValues", function (col) {
+    _defineProperty$1(_assertThisInitialized$2(_this), "getFilterValues", function (col) {
       var filterValues = _this.props.filterValues;
-      return filterValues && col.filter.can && filterValues[col.id] && filterValues[col.id] ? filterValues[col.id].map(function (elem) {
+      return filterValues && col.filter.can && filterValues[col.id] ? filterValues[col.id].map(function (elem) {
         return {
           text: elem.name,
           value: elem.id
@@ -16644,7 +16659,8 @@ function (_Component) {
           tdClass = _this$props2.tdClass,
           scrollX = _this$props2.scrollX,
           pageSize = _this$props2.pageSize,
-          rowSelection = _this$props2.rowSelection;
+          rowSelection = _this$props2.rowSelection,
+          bordered = _this$props2.bordered;
       if (items && !items.data && items.loading) return React__default.createElement(Loader, null);
       if (!items || !items.data) return null;
       var listItems = items.data.items.map(function (elem) {
@@ -16665,7 +16681,7 @@ function (_Component) {
           render: function render(object) {
             return dataRenderer(object, col, modelName, iconTheme);
           },
-          filters: _this2.getFiterValues(col),
+          filters: _this2.getFilterValues(col),
           filterIcon: col.filter.can ? function (filtered) {
             return React__default.createElement(antd.Icon, {
               type: "filter",
@@ -16675,7 +16691,7 @@ function (_Component) {
               theme: "outlined"
             });
           } : null,
-          filterDropdown: col.filter.can ? filterRenderer(col.filter.type, col.id, _this2.getFiterValues(col)) : null,
+          filterDropdown: col.filter.can ? filterRenderer(col.filter.type, col.id, _this2.getFilterValues(col)) : null,
           sorter: col.order.can ? function () {} : null // (a, b) => Number(a.id) - Number(b.id),
 
         };
@@ -16702,7 +16718,8 @@ function (_Component) {
         rowClassName: function rowClassName(record) {
           return record.row ? record.row.state : 'default';
         },
-        rowSelection: rowSelection
+        rowSelection: rowSelection,
+        bordered: bordered
       });
     }
   }]);
@@ -26899,7 +26916,8 @@ function (_Component) {
           isView = _this$props.isView,
           renderField = _this$props.renderField,
           CustomButtons = _this$props.CustomButtons,
-          rowSelection = _this$props.rowSelection;
+          rowSelection = _this$props.rowSelection,
+          bordered = _this$props.bordered;
 
       var _ref = createFormOptions || {},
           title = _ref.title,
@@ -26947,7 +26965,8 @@ function (_Component) {
         size: size,
         tdClass: tdClass,
         scrollX: scrollX,
-        rowSelection: rowSelection
+        rowSelection: rowSelection,
+        bordered: bordered
       }), isModalOpen === modelName && !createDisabled ? React__default.createElement(CreateModel, {
         title: title || 'Создать',
         titleEdit: titleEdit || 'Редактировать',
@@ -26993,7 +27012,8 @@ CrudFull.propTypes = {
   setCrudActionsFunc: propTypes.func,
   rowSelection: propTypes.oneOfType([propTypes.func, propTypes.object]),
   CustomButtons: propTypes.oneOfType([propTypes.func, propTypes.object]),
-  uploadFilesSettings: propTypes.string
+  uploadFilesSettings: propTypes.string,
+  bordered: propTypes.bool
 };
 CrudFull.defaultProps = {
   createButtonTitle: 'Добавить',

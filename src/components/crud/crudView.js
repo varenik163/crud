@@ -46,10 +46,10 @@ class CrudView extends Component {
 		}
 	};
 
-	getFiterValues = (col) => {
+	getFilterValues = (col) => {
 		const { filterValues } = this.props;
 
-		return filterValues && col.filter.can && filterValues[col.id] && filterValues[col.id] ?
+		return filterValues && col.filter.can && filterValues[col.id] ?
 			filterValues[col.id].map(elem => ({
 				text: elem.name,
 				value: elem.id
@@ -69,7 +69,8 @@ class CrudView extends Component {
 			tdClass,
 			scrollX,
 			pageSize,
-			rowSelection
+			rowSelection,
+			bordered
 		} = this.props;
 
 		if (items && !items.data && items.loading) return <Loader />;
@@ -89,7 +90,7 @@ class CrudView extends Component {
 			fixed: col.id === 'actions' && !isNotMiddleSizeWindow && fixActionColumn ? 'right' : null,
 			width: col.id === 'actions' && !isNotMiddleSizeWindow && fixActionColumn ? 150 : 'auto',
 			render: object => dataRenderer(object, col, modelName, iconTheme),
-			filters: this.getFiterValues(col),
+			filters: this.getFilterValues(col),
 			filterIcon: col.filter.can
 				? filtered => (
 					<Icon
@@ -99,7 +100,7 @@ class CrudView extends Component {
 					/>)
 				: null,
 			filterDropdown: col.filter.can
-				? filterRenderer(col.filter.type, col.id, this.getFiterValues(col))
+				? filterRenderer(col.filter.type, col.id, this.getFilterValues(col))
 				: null,
 			sorter: col.order.can ? () => {
 			} : null// (a, b) => Number(a.id) - Number(b.id),
@@ -126,6 +127,7 @@ class CrudView extends Component {
 				tableStyle={tableStyle}
 				rowClassName={record => record.row ? record.row.state : 'default'}
 				rowSelection={rowSelection}
+				bordered={bordered}
 			/>
 		);
 	}

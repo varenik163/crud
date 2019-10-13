@@ -43,7 +43,9 @@ export default {
 		}),
 		commonjs({
 			include: 'node_modules/**',
-
+			namedExports: {
+				'react-dom': ['unstable_batchedUpdates']
+			},
 		}),
 		image(),
 		// commonjs(
