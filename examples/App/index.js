@@ -74,6 +74,35 @@ class CrudSiteAlerts extends React.Component {
 					tableProps={{ scroll: { y: 240, x: 1500 } }}
 					scrollX={1500}
 				/>
+				<br/>
+				<br/>
+				<CrudFull
+					crudRead={`/v1/owner/object/103/share/invites`}
+					modelName="objectInvites"
+					createButtonTitleId="sidebar.keys.type.new"
+					fixActionColumn={false}
+					ButtonComponent={Button}
+				/>
+				<br/>
+				<br/>
+				<CrudFull
+					crudRead="/v1/owner/stat"
+					modelName="ownerStat"
+					// customActionsFunc={this.actionsFunc}
+					getChildrenUrl={id => `/v1/owner/stat/child/${id}`}
+					iconsProvider={(id) => {
+						switch (id) {
+						case 'revoke':
+							return 'stop';
+						case 'custom_delete':
+							return 'delete';
+						default:
+							return null;
+						}
+					}}
+					// fixActionColumn={false}
+					// tableProps={{ scroll: { y: 500, x: 2000 } }}
+				/>
 			</div>
 		)
 	}
@@ -96,4 +125,4 @@ export default connect(state => ({
 		? state.crudFilterValues.siteAlerts.group
 		: [],
 
-}), {  })(CrudSiteAlerts)
+}), { })(CrudSiteAlerts)

@@ -27,7 +27,7 @@ const ColumnSelect = ({ setCrudColumns: setCrudColumnsConnected, filteredColumns
 	}, [filteredColumns, setCrudColumnsConnected]);
 
 	const isDisabled = useCallback(
-		column => filteredColumns
+		column => filteredColumns.length === 1 || filteredColumns
 			.filter(e => e.visible).length === 2 && column.visible
 		, [filteredColumns]
 	);
