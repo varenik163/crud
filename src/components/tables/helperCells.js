@@ -61,12 +61,13 @@ const ArrayCell = ({ values, type, delimiter, style, isHtml, dateFormat, viewLim
 };
 
 const ArrayCellLimit = (props) => {
-	const [showAll, setShowAll] = useState(!props.viewLimit);
+	const initialState = props.values && (props.values.length <= props.viewLimit);
+	const [showAll, setShowAll] = useState(initialState);
 
 	return showAll ? props.values : (
 		<div>
 			{props.values.slice(0, props.viewLimit)}
-			{ setShowAll ? <a onClick={() => setShowAll(true)}>...</a> : null }
+			<a onClick={() => setShowAll(true)}>...</a>
 		</div>
 	);
 };

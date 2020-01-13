@@ -1,15 +1,13 @@
-import {configure, mount, shallow} from 'enzyme'
+import { configure, mount, shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16/build/index'
-import 'babel-polyfill'
 import React from 'react'
 import { Provider } from 'react-redux'
 import configureStore from 'redux-mock-store'
 import jsdom from 'jsdom'
-import CrudView from '../components/crud/crudView'
+import CrudView from '../components/crud/view/crudView'
 import thunk from 'redux-thunk'
 import { shallowToJson } from 'enzyme-to-json'
-import { BrowserRouter } from "react-router-dom"
-import actions from '../redux/actions'
+import { BrowserRouter } from 'react-router-dom'
 import responseMock from './responseMock'
 
 const { JSDOM } = jsdom;
@@ -20,7 +18,7 @@ global.navigator = {
 	userAgent: 'node.js',
 };
 
-//const {SignUpClass} = require('../../../containers/Page/signup');
+// const {SignUpClass} = require('../../../containers/Page/signup');
 
 configure({adapter: new Adapter()});
 
@@ -62,7 +60,8 @@ describe('should mount CrudView', () => {
 	const storeData = {
 		crudActionsFunc: { [modelName]: crudActionsFunc },
 		crudModels: { [modelName]: responseMock },
-		crudFilterValues: { [modelName]: {} }
+		crudFilterValues: { [modelName]: {} },
+		crudColumns: { [modelName]: responseMock.data.columns.map(e => ({ ...e, visible: true })) }
 	};
 
 	beforeAll(() => {

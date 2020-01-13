@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
-import { renderField } from '../../helpers/renderField'
+import { renderField } from '../../../helpers/renderField'
 
-class CreateViewForm extends Component {
+class CreatePage extends Component {
 
 	static propTypes = {
 		modalType: PropTypes.string,
@@ -17,32 +17,27 @@ class CreateViewForm extends Component {
 		renderField: PropTypes.oneOfType([
 			PropTypes.func,
 			PropTypes.object
-		])
+		]),
+		type: PropTypes.string,
+		options: PropTypes.object,
+		handleSubmit: PropTypes.func,
 	};
 
-	static defaultProps = {
-		renderField
-	};
+	static defaultProps = { renderField };
 
-	componentDidMount() {
+	handleCancel = () => this.props.onClose();
 
-	}
-
-	handleCancel = () => this.props.onClose()
-
-	handleSubmit = form => this.props.onCreate(form)
+	handleSubmit = form => this.props.onCreate(form);
 
 
-	mapFields = (fields) => {
-		return fields.map(props => props.fields
-			? <div key={props.name}>{this.mapFields(props.fields)}</div>
-			: <Field
-				{...props}
-				component={props.component || this.props.renderField}
-				key={props.name}
-				options={this.props.options[props.optionsKey] || props.options || []}
-			/>)
-	};
+	mapFields = fields => fields.map(props => (props.fields
+		? <div key={props.name}>{this.mapFields(props.fields)}</div>
+		: <Field
+			{...props}
+			component={props.component || this.props.renderField}
+			key={props.name}
+			options={this.props.options[props.optionsKey] || props.options || []}
+		/>));
 
 	render() {
 		const { type, title, titleEdit, fields } = this.props;
@@ -72,26 +67,20 @@ class CreateViewForm extends Component {
 	}
 }
 
-CreateViewForm.propTypes = {
-	type: PropTypes.string,
-	options: PropTypes.object,
-	handleSubmit: PropTypes.func,
-}
-
-CreateViewForm = reduxForm({
+const reduxFormConfig = {
 	form: 'createModel',
 	validate: (values, props) => {
 		let errors = {};
-		// if(!values.name) errors.name = 'Введите название';
-		props.fields.forEach(field => {
+
+		props.fields.forEach((field) => {
 			if (field.validateFunc) errors = field.validateFunc(values, errors)
 		});
 
 		return errors;
 	}
-})(CreateViewForm);
+};
 
-CreateViewForm = connect((state, props) => {
+const mapStateToProps = (state, props) => {
 	const options = props.fields.reduce((acc, field) => {
 		if (state[field.optionsKey]) {
 			acc[field.optionsKey] = state[field.optionsKey].data
@@ -104,6 +93,6 @@ CreateViewForm = connect((state, props) => {
 		crudCreateModalLoading: state.crudCreateModalLoading,
 		options
 	}
-}, {})(CreateViewForm);
+};
 
-export default CreateViewForm
+export default connect(mapStateToProps, {})(reduxForm(reduxFormConfig)(CreatePage))

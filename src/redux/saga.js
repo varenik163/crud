@@ -12,7 +12,7 @@ import reduceMessages from '../helpers/reduceMessages';
 export const selectCrudParams = state => state.crudParams;
 
 export function* notifySaga(action) {
-	if (action.error) yield notification('error', action.error.message)
+	if (action.error) yield notification('error', action.error.message);
 	if (action.response.status === SUCCESS_REQ) yield notification('success', action.response.message)
 }
 
@@ -54,7 +54,6 @@ export function* fetchCrudModelsSaga(action) {
 		order: !order ? null : order === 'ascend' ? SORT_ASC : SORT_DESC,
 		order_by,
 		page
-
 	}) : '';
 
 	const paramsArr = [params];
@@ -82,15 +81,31 @@ export function* fetchCrudModelsSaga(action) {
 
 export function* fetchCrudModelsSuccessSaga(action) {
 	const { response, payload } = action;
+	const { modelName } = payload.params;
+
 	if (!response.data) return;
 
 	const { columns } = response.data;
 	for (let i = 0; i < columns.length; i++) {
 		const column = columns[i];
 		if (column.filter.can && column.filter.query) {
-			yield put(actions.fetchCrudFilterValues(payload.params.modelName, column.id, column.filter.query))
+			yield put(actions.fetchCrudFilterValues(modelName, column.id, column.filter.query))
 		}
 	}
+
+	const storedColumns = localStorage.getItem(modelName + 'Columns');
+	const storedColumnsParsed = storedColumns ? JSON.parse(storedColumns) : null;
+
+	yield put(actions.setCrudColumns(columns.map((column) => {
+		const matchedColumn = storedColumnsParsed ? storedColumnsParsed.find(e => e.id === column.id) : null;
+		return { ...column, visible: matchedColumn ? matchedColumn.visible : true }
+	}), modelName))
+
+}
+
+export function* setCrudColumnsSaga(action) {
+	const { modelName, columns } = action.payload;
+	yield localStorage.setItem(modelName + 'Columns', JSON.stringify(columns));
 }
 
 export function* fetchCrudFilterValuesSaga(action) {
@@ -199,7 +214,7 @@ export function* updateModelsSaga(action) {
 export function* deleteModelSaga(action) {
 	yield put(request({
 		...action,
-		method: action.payload.action.method, //'POST',
+		method: action.payload.action.method, // 'POST',
 		auth: true,
 		url: `${action.payload.action.url}`,
 		payload: action.payload,
@@ -229,7 +244,7 @@ export function* changeModelSaga(action) {
 
 	yield put(request({
 		...action,
-		method: action.payload.action.method, //'POST',
+		method: action.payload.action.method, // 'POST',
 		auth: true,
 		url: `${action.payload.action.url}`,
 		payload: params[action.payload.modelName].submitShape(action.payload.form, uploadedFiles),
@@ -298,6 +313,7 @@ export default function* rootSaga() {
 		takeEvery(actions.CHANGE_MODEL + ERROR, submitModelsModalFormFailSaga),
 
 		takeEvery(actions.FETCH_FILE_CONFIG, fetchFileConfigSaga),
+		takeEvery(actions.SET_CRUD_COLUMNS, setCrudColumnsSaga),
 
 		fork(requestMiddleware)
 

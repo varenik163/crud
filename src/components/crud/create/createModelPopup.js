@@ -1,9 +1,9 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Modal } from 'antd';
 import { reduxForm, Field } from 'redux-form'
-import { renderField } from '../../helpers/renderField'
+import { renderField } from '../../../helpers/renderField'
 
 class CreateModalForm extends Component {
 
@@ -22,9 +22,7 @@ class CreateModalForm extends Component {
 		uploadFileUrl: PropTypes.string
 	};
 
-	static defaultProps = {
-		renderField
-	};
+	static defaultProps = { renderField };
 
 	componentDidMount() {
 
@@ -34,7 +32,7 @@ class CreateModalForm extends Component {
 		this.props.onClose();
 	};
 
-	handleSubmit = form => {
+	handleSubmit = (form) => {
 		this.props.onCreate(form)
 	};
 
@@ -42,21 +40,21 @@ class CreateModalForm extends Component {
 
 	};
 
-	mapFields = fields => {
-		return fields.map(props => props.fields ? (
-			<div key={props.name}>
-				{this.mapFields(props.fields)}
-			</div>
-		) : <Field
-			{...props}
-			component={props.component || this.props.renderField}
-			key={props.name}
-			options={this.props.options[props.optionsKey] || props.options || []}
-		/>)
-	};
+	mapFields = fields => fields.map(props => (props.fields ? (
+		<div key={props.name}>
+			{this.mapFields(props.fields)}
+		</div>
+	) : <Field
+		{...props}
+		component={props.component || this.props.renderField}
+		key={props.name}
+		options={this.props.options[props.optionsKey] || props.options || []}
+	/>));
 
 	render() {
-		const { modalType, title, titleEdit, fields, crudCreateModalLoading } = this.props;
+		const {
+			modalType, title, titleEdit, fields, crudCreateModalLoading
+		} = this.props;
 
 		return (
 			<Modal
@@ -81,7 +79,7 @@ CreateModalForm = reduxForm({
 	validate: (values, props) => {
 		let errors = {};
 		// if(!values.name) errors.name = 'Введите название';
-		props.fields.forEach(field => {
+		props.fields.forEach((field) => {
 			if (field.validateFunc) errors = field.validateFunc(values, errors)
 		});
 
@@ -90,7 +88,7 @@ CreateModalForm = reduxForm({
 	// initialValues comes from outside
 })(CreateModalForm);
 
-CreateModalForm =  connect((state, props) => {
+CreateModalForm = connect((state, props) => {
 	const options = props.fields.reduce((acc, field) => {
 		if (state[field.optionsKey]) {
 			acc[field.optionsKey] = state[field.optionsKey].data
@@ -103,8 +101,6 @@ CreateModalForm =  connect((state, props) => {
 		crudCreateModalLoading: state.crudCreateModalLoading,
 		options
 	}
-}, {
-
-})(CreateModalForm);
+}, {})(CreateModalForm);
 
 export default CreateModalForm

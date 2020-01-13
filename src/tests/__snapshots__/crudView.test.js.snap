@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`it should render CrudFull it should render SignUp connected container 1`] = `null`;
-
 exports[`it should render CrudView it should render SignUp connected container 1`] = `
 <CrudView
   fetchCrudChildren={[Function]}
@@ -102,6 +100,14 @@ exports[`it should render CrudView it should render SignUp connected container 1
                 "name": "Изменить",
                 "type": "query",
                 "url": "/v1/admin/object/property/type/5/update",
+              },
+              Object {
+                "icon": "fa fa-reply",
+                "id": "restore",
+                "method": "POST",
+                "name": "Восстановить",
+                "type": "query",
+                "url": "/v1/admin/object/type/3/restore",
               },
               Object {
                 "icon": "fa fa-trash",
@@ -221,6 +227,9 @@ exports[`it should render CrudView it should render SignUp connected container 1
     }
   }
   modelName="model"
+  pageSize={20}
+  scrollX={1300}
+  setCrudParams={[Function]}
   store={
     Object {
       "clearActions": [Function],
@@ -252,5 +261,6 @@ exports[`it should render CrudView it should render SignUp connected container 1
       "unsubscribe": [Function],
     }
   }
+  tableProps={Object {}}
 />
 `;

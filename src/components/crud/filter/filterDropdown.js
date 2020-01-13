@@ -1,6 +1,6 @@
 import React from 'react'
 import { Input, Button, Checkbox, Select, DatePicker } from 'antd';
-import moment from 'moment'
+import moment from 'moment/moment'
 import 'moment/locale/ru'
 
 const { Option } = Select;

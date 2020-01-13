@@ -1,6 +1,5 @@
 import actions from './actions'
-import { ERROR, SORT_DESC, SUCCESS, START } from '../constants';
-// import fitureResp from './respFixture'
+import { ERROR, SUCCESS, START } from '../constants';
 
 export const crudModelsReducer = (state = {}, action) => {
 	const { type, response, error, payload } = action;
@@ -33,13 +32,26 @@ export const crudModelsReducer = (state = {}, action) => {
 				...model,
 				data: {
 					...model.data,
-					items: model.data.items.map(elem => elem.id === payload.id ? {
+					items: model.data.items.map(elem => (elem.id === payload.id ? {
 						...elem,
 						children: response.data.items
-					} : elem)
+					} : elem))
 				}
 			}
 		};
+	default:
+		return state;
+	}
+};
+
+export const crudColumnsReducer = (state = {}, action) => {
+	const { type, response, payload } = action;
+
+	switch (type) {
+	case actions.FETCH_CRUD_MODELS + SUCCESS:
+		return { ...state, [payload.params.modelName]: response.data.columns };
+	case actions.SET_CRUD_COLUMNS:
+		return { ...state, [payload.modelName]: payload.columns };
 	default:
 		return state;
 	}
@@ -70,7 +82,7 @@ export const crudFilterValuesReducer = (state = {}, action) => {
 };
 
 export const crudActionsFuncReducer = (state = null, action) => {
-	const { type, response, error, payload } = action;
+	const { type, payload } = action;
 
 	switch (type) {
 	case actions.SET_CRUD_ACTIONS_FUNC:
@@ -85,7 +97,7 @@ export const crudActionsFuncReducer = (state = null, action) => {
 
 
 export const isOpenModelModalReducer = (state = false, action) => {
-	const { type, response, error, payload } = action;
+	const { type, payload } = action;
 
 	switch (type) {
 	case actions.TOGGLE_CREATE_MODEL_MODAL:
@@ -96,7 +108,7 @@ export const isOpenModelModalReducer = (state = false, action) => {
 };
 
 export const modelModalFormReducer = (state = {}, action) => {
-	const { type, response, error, payload } = action;
+	const { type, payload } = action;
 
 	switch (type) {
 	case actions.SET_MODEL_MODAL_FORM:
@@ -177,5 +189,6 @@ export default {
 	crudParams: crudParamsReducer,
 	crudCreateModalLoading: crudCreateModalLoadingReducer,
 	uploaderFiles: uploaderFilesReducer,
-	fileConfig: fetchFileConfigReducer
+	fileConfig: fetchFileConfigReducer,
+	crudColumns: crudColumnsReducer
 }

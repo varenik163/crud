@@ -1,10 +1,9 @@
-import { Button, Col, Row, Typography } from 'antd';
-import PropTypes from 'prop-types'
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Field, reduxForm } from 'redux-form'
-import { renderField } from '../../helpers/renderField'
-import { Form, Input } from 'antd'
+import { renderField } from '../../../helpers/renderField'
+import { Form, Input, Button, Col, Row, Typography } from 'antd'
+import { reduxForm } from 'redux-form'
 
 class CreateViewForm extends Component {
 
@@ -18,20 +17,18 @@ class CreateViewForm extends Component {
 		renderField: PropTypes.oneOfType([
 			PropTypes.func,
 			PropTypes.object
-		])
+		]),
+		type: PropTypes.string,
+		options: PropTypes.object,
+		initialValues: PropTypes.object,
+		handleSubmit: PropTypes.func,
 	};
 
-	static defaultProps = {
-		renderField
-	};
+	static defaultProps = { renderField };
 
-	componentDidMount() {
+	handleCancel = () => this.props.onClose();
 
-	}
-
-	handleCancel = () => this.props.onClose()
-
-	handleSubmit = form => this.props.onCreate(form)
+	handleSubmit = form => this.props.onCreate(form);
 
 
 	mapFields = (fields) => {
@@ -44,11 +41,11 @@ class CreateViewForm extends Component {
 				</Form>))
 		}
 		return null
-	}
+	};
 
 	render() {
 		const { fields } = this.props;
-		const { Title } = Typography
+		const { Title } = Typography;
 		return (
 			<Row align="middle" justify="space-between">
 				<Col span={20}>
@@ -63,26 +60,20 @@ class CreateViewForm extends Component {
 	}
 }
 
-CreateViewForm.propTypes = {
-	type: PropTypes.string,
-	options: PropTypes.object,
-	handleSubmit: PropTypes.func,
-}
-
-CreateViewForm = reduxForm({
+const reduxFormConfig = {
 	form: 'createModel',
 	validate: (values, props) => {
 		let errors = {};
-		// if(!values.name) errors.name = 'Введите название';
-		props.fields.forEach(field => {
+
+		props.fields.forEach((field) => {
 			if (field.validateFunc) errors = field.validateFunc(values, errors)
 		});
 
 		return errors;
 	}
-})(CreateViewForm);
+};
 
-CreateViewForm = connect((state, props) => {
+const mapStateToProps = (state, props) => {
 	const options = props.fields.reduce((acc, field) => {
 		if (state[field.optionsKey]) {
 			acc[field.optionsKey] = state[field.optionsKey].data
@@ -95,6 +86,6 @@ CreateViewForm = connect((state, props) => {
 		crudCreateModalLoading: state.crudCreateModalLoading,
 		options
 	}
-}, {})(CreateViewForm);
+};
 
-export default CreateViewForm
+export default connect(mapStateToProps, {})(reduxForm(reduxFormConfig)(CreateViewForm))

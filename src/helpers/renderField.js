@@ -6,7 +6,7 @@ import { Field } from 'redux-form'
 //import locale from 'antd/lib/date-picker/locale/ru_RU'
 //moment.locale('ru');
 import Editor from '../components/custom/Editor'
-import Uploader from '../components/crud/uploader';
+import Uploader from '../components/crud/uploader/uploader';
 
 const { Option: SelectOption } = Select;
 const Search = Input.Search;

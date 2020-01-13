@@ -14,6 +14,8 @@ const actions = {
 	SET_UPLOADER_FILES: 'SET_UPLOADER_FILES',
 	SET_UPLOADER_DEFAULT_FILE_LIST: 'SET_UPLOADER_DEFAULT_FILE_LIST',
 	FETCH_FILE_CONFIG: 'FETCH_FILE_CONFIG',
+	SET_CRUD_COLUMNS: 'SET_CRUD_COLUMNS',
+	setCrudColumns: (columns, modelName) => ({ type: actions.SET_CRUD_COLUMNS, payload: { columns, modelName } }),
 	fetchFileConfig: (url, modelName) => ({ type: actions.FETCH_FILE_CONFIG, payload: { url, modelName } }),
 	setUploaderDefaultFileList: (defaultFileList, modelName) => ({
 		type: actions.SET_UPLOADER_DEFAULT_FILE_LIST,
@@ -22,7 +24,9 @@ const actions = {
 	setUploaderFiles: (files, modelName) => ({ type: actions.SET_UPLOADER_FILES, payload: { files, modelName } }),
 	fetchCrudChildren: (id, modelName, url) => ({
 		type: actions.FETCH_CRUD_CHILDREN,
-		payload: { id, params: { modelName }, url }
+		payload: {
+			id, params: { modelName }, url
+		}
 	}),
 	toggleCreateModelModal: modelName => ({ type: actions.TOGGLE_CREATE_MODEL_MODAL, payload: { modelName } }),
 

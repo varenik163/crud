@@ -1,18 +1,19 @@
-import { configure, mount, shallow } from 'enzyme'
+import { configure, shallow } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16/build/index'
 import React from 'react'
 import configureStore from 'redux-mock-store'
 import jsdom from 'jsdom'
-import UploderWrapper from '../components/crud/uploader'
-import UploderComponent from '../components/custom/Uploader/index'
-import UploderDecorator from '../components/custom/Uploader/index'
+import UploderWrapper from '../components/crud/uploader/uploader'
 import thunk from 'redux-thunk';
 import { shallowToJson } from 'enzyme-to-json';
 
-const doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
+const { JSDOM } = jsdom;
+const doc = new JSDOM('<!doctype html><html><body></body></html>');
 global.document = doc;
 global.window = doc.defaultView;
-global.navigator = { userAgent: 'node.js' };
+global.navigator = {
+	userAgent: 'node.js',
+};
 
 configure({ adapter: new Adapter() });
 

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import Uploader from '../custom/Uploader';
+import Uploader from '../../custom/Uploader';
 import { connect } from 'react-redux'
-import actions from '../../redux/actions'
+import actions from '../../../redux/actions'
 
 const { setUploaderFiles, setUploaderDefaultFileList, fetchFileConfig } = actions;
 

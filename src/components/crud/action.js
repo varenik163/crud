@@ -65,7 +65,7 @@ class Action extends Component {
 	};
 
 	render() {
-		const { data, row } = this.props;
+		const { data } = this.props;
 
 		return (
 			<ActionStyled>
@@ -80,16 +80,17 @@ class Action extends Component {
 Action.propTypes = {
 	data: PropTypes.object.isRequired,
 	row: PropTypes.object.isRequired,
+	params: PropTypes.object.isRequired,
 	modelName: PropTypes.string,
 	iconTheme: PropTypes.string,
-	iconsProvider: PropTypes.func
+	iconsProvider: PropTypes.func,
+	push: PropTypes.func.isRequired,
+	actionsFunc: PropTypes.func.isRequired,
 };
 
-Action.defaultProps = { iconTheme: 'outlined' }
+Action.defaultProps = { iconTheme: 'outlined' };
 
 export default connect((state, props) => ({
 	actionsFunc: state.crudActionsFunc[props.modelName],
 	params: state.crudParams[props.modelName]
-}), {
-	push
-})(Action)
+}), { push })(Action)

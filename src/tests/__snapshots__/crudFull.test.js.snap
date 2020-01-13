@@ -2,6 +2,7 @@
 
 exports[`it should render CrudFull it should render CrudFull connected container 1`] = `
 <CrudFull
+  CustomButtons={[Function]}
   btnStyle={Object {}}
   changeModel={[Function]}
   createButtonTitle="Добавить"
@@ -9,7 +10,10 @@ exports[`it should render CrudFull it should render CrudFull connected container
   createModel={[Function]}
   deleteModel={[Function]}
   iconTheme="outline"
+  iconsProvider={[Function]}
+  onDeleteConfirmMessageFunc={[Function]}
   restoreModel={[Function]}
+  rowSelection={null}
   setCrudActionsFunc={[Function]}
   setCrudParams={[Function]}
   setModelModalForm={[Function]}
@@ -46,64 +50,11 @@ exports[`it should render CrudFull it should render CrudFull connected container
     }
   }
   submitShape={[Function]}
+  tableProps={Object {}}
   tableStyle={Object {}}
   tableWrapper={null}
   toggleCreateModelModal={[Function]}
   updateShape={[Function]}
-/>
-`;
-
-exports[`it should render Signup page it should render SignUp connected container 1`] = `
-<CrudFull
-  btnStyle={Object {}}
-  changeModel={[Function]}
-  createButtonTitle="Добавить"
-  createDisabled={true}
-  createModel={[Function]}
-  deleteModel={[Function]}
-  fields={Array []}
-  handleSubmit={[Function]}
-  iconTheme="outline"
-  restoreModel={[Function]}
-  setCrudActionsFunc={[Function]}
-  setCrudParams={[Function]}
-  setModelModalForm={[Function]}
-  size="default"
-  store={
-    Object {
-      "clearActions": [Function],
-      "dispatch": [Function],
-      "getActions": [Function],
-      "getState": [Function],
-      "replaceReducer": [Function],
-      "subscribe": [Function],
-    }
-  }
-  storeSubscription={
-    Subscription {
-      "listeners": Object {
-        "clear": [Function],
-        "get": [Function],
-        "notify": [Function],
-        "subscribe": [Function],
-      },
-      "onStateChange": [Function],
-      "parentSub": undefined,
-      "store": Object {
-        "clearActions": [Function],
-        "dispatch": [Function],
-        "getActions": [Function],
-        "getState": [Function],
-        "replaceReducer": [Function],
-        "subscribe": [Function],
-      },
-      "unsubscribe": [Function],
-    }
-  }
-  submitShape={[Function]}
-  tableStyle={Object {}}
-  tableWrapper={null}
-  toggleCreateModelModal={[Function]}
-  updateShape={[Function]}
+  uploadFilesSettings={null}
 />
 `;

@@ -4,7 +4,7 @@ import { message } from 'antd'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import actions from '../../../redux/actions'
-import UploaderFilePreview from '../../crud/uploaderFilePreview';
+import UploaderFilePreview from '../../crud/uploader/uploaderFilePreview';
 
 const { setUploaderDefaultFileList } = actions;
 

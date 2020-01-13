@@ -1,9 +1,9 @@
 import React from 'react';
 import crudFull from './components/crud/crudFull'
-import crudView from './components/crud/crudView'
+import crudView from './components/crud/view/crudView'
 import crudActions from './redux/actions'
 import crudReducers from './redux/reducer'
-import crudUploader from './components/crud/uploader'
+import crudUploader from './components/crud/uploader/uploader'
 import crudSagas, { updateModelsSaga } from './redux/saga'
 import { requests } from './redux/requestSaga'
 import './style.css'

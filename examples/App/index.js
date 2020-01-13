@@ -56,10 +56,10 @@ class CrudSiteAlerts extends React.Component {
 		};
 
 		return (
-			<div className="box box-body crudTable">
+			<div className="box box-body crudTable" style={{ width: '1350px' }}>
 				<CrudFull
-					crudRead={`/v1/owner/object/57/keys`}
-					crudCreate={`/v1/owner/object/57/key`}
+					crudRead="/v1/owner/object/list"
+					// crudCreate={`/v1/owner/object/57/key`}
 					submitShape={form => ({ ...form })}
 					updateShape={elem => ({ config: elem.files.config })}
 					createDisabled={false}
@@ -69,8 +69,10 @@ class CrudSiteAlerts extends React.Component {
 					ButtonComponent={Button}
 					customActionsFunc={this.actionsFunc}
 					onDeleteConfirmMessageFunc={() => 'Удалить запись?'}
-					fixActionColumn={false}
-					rowSelection={rowSelection}
+					// fixActionColumn={false}
+					// rowSelection={rowSelection}
+					tableProps={{ scroll: { y: 240, x: 1500 } }}
+					scrollX={1500}
 				/>
 			</div>
 		)
