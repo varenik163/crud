@@ -44,6 +44,18 @@ export const crudModelsReducer = (state = {}, action) => {
 	}
 };
 
+export const childrenReducer = (state = {}, action) => {
+	const { type, response, payload } = action;
+
+	if (type === actions.FETCH_CRUD_CHILDREN + SUCCESS) {
+		return {
+			...state,
+			[payload.id]: response.data.items
+		}
+	}
+	return state;
+};
+
 export const crudColumnsReducer = (state = {}, action) => {
 	const { type, response, payload } = action;
 
@@ -190,5 +202,6 @@ export default {
 	crudCreateModalLoading: crudCreateModalLoadingReducer,
 	uploaderFiles: uploaderFilesReducer,
 	fileConfig: fetchFileConfigReducer,
-	crudColumns: crudColumnsReducer
+	crudColumns: crudColumnsReducer,
+	children: childrenReducer,
 }

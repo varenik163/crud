@@ -17120,6 +17120,15 @@ function (_Component) {
       }) : [];
     });
 
+    _defineProperty$1(_assertThisInitialized$2(_this), "mapItems", function (items) {
+      return items.map(function (elem) {
+        return _objectSpread({}, elem, {
+          key: elem.id,
+          children: elem.has_child ? _this.mapItems(_this.props.children[elem.id] || []) : null
+        });
+      });
+    });
+
     return _this;
   }
 
@@ -17156,15 +17165,9 @@ function (_Component) {
           filteredColumns = _this$props2.filteredColumns;
       if (items && !items.data && items.loading) return React__default.createElement(Loader, null);
       if (!items || !items.data) return null;
-      var listItems = items.data.items.map(function (elem) {
-        return _objectSpread({}, elem, {
-          key: elem.id,
-          children: elem.has_child ? elem.children || [] : null
-        });
-      }); // console.log(fixActionColumn, isNotMiddleSizeWindow)
+      var listItems = this.mapItems(items.data.items); // console.log(fixActionColumn, isNotMiddleSizeWindow)
 
       var columnsDirty = filteredColumns[modelName];
-      console.log(filteredColumns);
       var columns = (columnsDirty || []).filter(function (e) {
         return e.visible;
       }).map(function (col) {
@@ -17238,6 +17241,7 @@ function (_Component) {
 
 CrudView.propTypes = {
   modelName: propTypes.string.isRequired,
+  children: propTypes.shape({}).isRequired,
   url: propTypes.string.isRequired,
   fixActionColumn: propTypes.bool,
   iconTheme: propTypes.string,
@@ -17260,7 +17264,8 @@ var CrudView$1 = connect(function (state, props) {
     items: state.crudModels[props.modelName],
     filterValues: state.crudFilterValues[props.modelName],
     crudParams: state.crudParams,
-    filteredColumns: state.crudColumns
+    filteredColumns: state.crudColumns,
+    children: state.children
   };
 }, {
   fetchCrudModels: fetchCrudModels,
@@ -27543,6 +27548,19 @@ var crudModelsReducer = function crudModelsReducer() {
       return state;
   }
 };
+var childrenReducer = function childrenReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+  var type = action.type,
+      response = action.response,
+      payload = action.payload;
+
+  if (type === actions.FETCH_CRUD_CHILDREN + SUCCESS$1) {
+    return _objectSpread$2({}, state, _defineProperty$15({}, payload.id, response.data.items));
+  }
+
+  return state;
+};
 var crudColumnsReducer = function crudColumnsReducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var action = arguments.length > 1 ? arguments[1] : undefined;
@@ -27719,7 +27737,8 @@ var crudReducers = {
   crudCreateModalLoading: crudCreateModalLoadingReducer,
   uploaderFiles: uploaderFilesReducer,
   fileConfig: fetchFileConfigReducer,
-  crudColumns: crudColumnsReducer
+  crudColumns: crudColumnsReducer,
+  children: childrenReducer
 };
 
 var _typeof$15 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };

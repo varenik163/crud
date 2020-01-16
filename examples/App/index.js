@@ -60,6 +60,7 @@ class CrudSiteAlerts extends React.Component {
 				<CrudFull
 					crudRead="/v1/owner/object/list"
 					// crudCreate={`/v1/owner/object/57/key`}
+					getChildrenUrl={id => `/v1/owner/object/${id}/child`}
 					submitShape={form => ({ ...form })}
 					updateShape={elem => ({ config: elem.files.config })}
 					createDisabled={false}

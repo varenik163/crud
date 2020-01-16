@@ -58,6 +58,12 @@ class CrudView extends Component {
 			: []
 	};
 
+	mapItems = items => items.map(elem => ({
+		...elem,
+		key: elem.id,
+		children: elem.has_child ? this.mapItems(this.props.children[elem.id] || []) : null
+	}));
+
 	render() {
 		const {
 			items,
@@ -79,15 +85,11 @@ class CrudView extends Component {
 		if (items && !items.data && items.loading) return <Loader />;
 		if (!items || !items.data) return null;
 
-		const listItems = items.data.items.map(elem => ({
-			...elem,
-			key: elem.id,
-			children: elem.has_child ? elem.children || [] : null
-		}));
+		const listItems = this.mapItems(items.data.items);
 		// console.log(fixActionColumn, isNotMiddleSizeWindow)
 
 		const columnsDirty = filteredColumns[modelName];
-		console.log(filteredColumns);
+
 		const columns = (columnsDirty || []).filter(e => e.visible).map(col => ({
 			id: col.id,
 			className: 'crud-table-column' + (tdClass ? ' ' + tdClass : ''),
@@ -149,6 +151,7 @@ class CrudView extends Component {
 
 CrudView.propTypes = {
 	modelName: PropTypes.string.isRequired,
+	children: PropTypes.shape({}).isRequired,
 	url: PropTypes.string.isRequired,
 	fixActionColumn: PropTypes.bool,
 	iconTheme: PropTypes.string,
@@ -172,7 +175,8 @@ export default connect((state, props) => ({
 	items: state.crudModels[props.modelName],
 	filterValues: state.crudFilterValues[props.modelName],
 	crudParams: state.crudParams,
-	filteredColumns: state.crudColumns
+	filteredColumns: state.crudColumns,
+	children: state.children,
 }), {
 	fetchCrudModels,
 	fetchCrudChildren,
